@@ -2,6 +2,74 @@
 [webtrees](http://www.webtrees.net) is a free open source web-based genealogy application intended for collaborative use.
 It is compatible with standard 5.5.1-GEDCOM files. In this docker image based on phusion webtrees is provided. A database is not embedded in this image.
 
+## Quick Start
+
+### Create network
+```
+docker networks create webtrees
+```
+
+### Create DB container
+```
+docker create \
+        --name webtrees-mysql \
+        --network webtrees \
+        -v /home/chris/services/webtrees-mysql/var/lib/mysql:/var/lib/mysql \
+        -v /home/chris/services/webtrees-mysql/var/lib/mysql-files:/var/lib/mysql-files \
+        -e MYSQL_ROOT_PASSWORD="<root-pass>" \
+	-e MYSQL_USER="webtrees" \
+	-e MYSQL_PASSWORD="<mysql-pass>" \
+	-e MYSQL_DATABASE="webtrees" \
+        --restart always \
+        mysql:8.0.13
+```
+
+```
+docker start webtrees-mysql
+```
+
+### Fix mysql password format
+```
+docker exec -it webtrees-mysql bash -c "echo 'default-authentication-plugin=mysql_native_password' >> /etc/mysql/my.cnf"
+docker exec -it webtrees-mysql bash -c "mysql -u root -p -e \"alter user 'webtrees'@'%' identified with mysql_native_password by '<mysql-pass>';\""
+docker restart webtrees-mysql
+```
+
+### Create container
+
+```
+docker create \
+	--name webtrees \
+	--network webtrees \
+	-v <volume-mount-dir>/webtrees/data:/var/www/html/data \
+	-v <volume-mount-dir>/webtrees/media:/var/www/html/media \
+	-e GROUP_ID=999 \
+	-e PORT=443 \
+	-p 443:443 \
+	-v /etc/localtime:/etc/localtime \
+	--restart always \
+	cbenning/webtrees:2.0-beta
+
+docker start webtrees
+```
+
+### Fix permissions
+
+```
+chmod -R 777 <volume-mount-dir>/services/webtrees
+```
+
+### Setup
+Go to <a href="https://localhost">https://localhost</a>
+
+In the form enter:
+<ul>
+<li>Host: webtrees-mysql</li>
+<li>User: webtrees</li>
+<li>Pass: <mysql-pass></li>
+<li>Database: webtrees</li>
+</ul>
+
 ## Usage
 
 ```
