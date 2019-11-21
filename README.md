@@ -6,7 +6,7 @@ It is compatible with standard 5.5.1-GEDCOM files. In this docker image based on
 
 ### Create network
 ```
-docker networks create webtrees
+docker network create webtrees
 ```
 
 ### Create DB container
@@ -16,10 +16,10 @@ docker create \
         --network webtrees \
         -v /home/chris/services/webtrees-mysql/var/lib/mysql:/var/lib/mysql \
         -v /home/chris/services/webtrees-mysql/var/lib/mysql-files:/var/lib/mysql-files \
-        -e MYSQL_ROOT_PASSWORD="<root-pass>" \
-	-e MYSQL_USER="webtrees" \
-	-e MYSQL_PASSWORD="<mysql-pass>" \
-	-e MYSQL_DATABASE="webtrees" \
+        -e MYSQL_ROOT_PASSWORD=<root-pass> \
+	-e MYSQL_USER=webtrees \
+	-e MYSQL_PASSWORD=<mysql-pass> \
+	-e MYSQL_DATABASE=webtrees \
         --restart always \
         mysql:8.0.13
 ```
