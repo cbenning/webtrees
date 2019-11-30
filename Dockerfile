@@ -84,9 +84,13 @@ ADD webtrees.conf /etc/apache2/sites-available/
 
 RUN chmod 644 /etc/apache2/sites-available/webtrees.conf \
     && a2dissite 000-default \
-    && a2enmod ssl \
     && a2ensite webtrees
+
+#RUN chmod 644 /etc/apache2/sites-available/webtrees.conf \
+#    && a2dissite 000-default \
+#    && a2enmod ssl \
+#    && a2ensite webtrees
 
 VOLUME /var/www/html/data /var/www/html/media
 
-EXPOSE 443/tcp
+EXPOSE 80/tcp
