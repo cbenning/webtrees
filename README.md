@@ -4,6 +4,19 @@ It is compatible with standard 5.5.1-GEDCOM files. In this docker image based on
 
 ## Quick Start
 
+### Create image
+
+```
+docker build -t cbenning/webtrees:2.0.2-nossl .
+```
+
+### Send to hub
+
+```
+docker push cbenning/webtrees:2.0.2-nossl
+```
+
+
 ### Create network
 ```
 docker network create webtrees

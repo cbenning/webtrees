@@ -6,11 +6,11 @@ ENV supervisor_conf /etc/supervisor/supervisord.conf
 ENV security_conf /etc/apache2/conf-available/security.conf
 ENV start_scripts_path /bin
 
+#RUN apt-get update -qq
 # Update packages from baseimage
-RUN apt-get update -qq
 # Install and activate necessary software
 # Remark: Apache module mod_wsgi is installed but not enabled (anymore)
-RUN apt-get upgrade -qy && apt-get install -qy \
+RUN apt-get update && apt-get upgrade -qy && apt-get install -qy \
     apt-utils \
     cron \
     supervisor \
@@ -50,7 +50,7 @@ RUN apt-get upgrade -qy && apt-get install -qy \
     && chmod 750 /crt \
     && openssl req -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /crt/webtrees.key -out /crt/webtrees.crt -subj "/C=DE/ST=H/L=F/O=Webtrees/OU=www.webtrees.net/CN=webtrees" \ 
     && chmod 640 /crt/* \
-    && wget -q https://github.com/fisharebest/webtrees/releases/download/2.0.0-beta.5/webtrees-2.0.0-beta.5.zip -O /tmp/webtrees.zip \
+    && wget -q https://github.com/fisharebest/webtrees/releases/download/2.0.7/webtrees-2.0.7.zip -O /tmp/webtrees.zip \ 
     && unzip -d /tmp/ -o /tmp/webtrees.zip \
     && rm -Rf /var/www/html \
     && mv /tmp/webtrees /var/www/html \
